@@ -7,8 +7,8 @@ exports.cpfExiste = async (cpf) => {
   return !!passageiro;
 };
 exports.vooStatus = async(vooId) => {
-  const voo = await Voo.findOne({ numeroVoo })
-  if (voo.status.toLowerCase() == 'embarque') {
+  const voo = await Voo.findOne({ vooId })
+  if (voo.status == 'embarque') {
     return voo
   }
 }

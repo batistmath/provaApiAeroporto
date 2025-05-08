@@ -15,7 +15,7 @@ controller.use(express.json())
           return res.status(400).send({ erro: 'CPF já cadastrado.' });
         }
         const voo = await validatorPass.vooStatus(req.body.vooId);
-        if (voo){
+        if (!voo){
             return res.status(400).send({ erro: 'So e permitido o check-in se o voo estiver como embarque' });
         }
         const passageiros = new Passageiro({
