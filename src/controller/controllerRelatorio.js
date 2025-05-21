@@ -4,12 +4,11 @@ const Passageiro = require('../model/modelPassageiro');
 exports.getRelatorioVoosHoje = async (req, res) => {
   try {
     const hoje = new Date();
-    hoje.setUTCHours(0, 0, 0, 0); // Ajusta para o início do dia em UTC
+    hoje.setUTCHours(0, 0, 0, 0); 
     const amanha = new Date(hoje);
-    amanha.setUTCDate(hoje.getUTCDate() + 1); // Avança um dia em UTC
+    amanha.setUTCDate(hoje.getUTCDate() + 1); 
 
     const relatorio = await Voo.aggregate([
-      // Stage 1: Filtrar os voos para o dia atual
       {
         $match: {
           dataHoraPartida: {
@@ -18,16 +17,15 @@ exports.getRelatorioVoosHoje = async (req, res) => {
           }
         }
       },
-      // Stage 2: Fazer o "join" com a coleção de passageiros
       {
         $lookup: {
           from: 'passageiros',
           localField: 'numeroVoo',
-          foreignField: 'vooId', // **CAMPO CORRIGIDO: 'vooId' (com 'i' minúsculo no final)**
+          foreignField: 'vooId', 
           as: 'passageirosDetalhes'
         }
       },
-      // Stage 3: Projetar (formatar) a saída
+
       {
         $project: {
           _id: 1,
@@ -35,7 +33,7 @@ exports.getRelatorioVoosHoje = async (req, res) => {
           origem: 1,
           destino: 1,
           dataHoraPartida: 1,
-          portaoAtribuidoVoo: '$portaID', // Mantemos o portão no nível do voo se desejar
+          portaoAtribuidoVoo: '$portaID',
           statusVoo: '$status',
           passageiros: {
             $map: {
@@ -45,8 +43,7 @@ exports.getRelatorioVoosHoje = async (req, res) => {
                 nome: '$$passageiro.nome',
                 cpf: '$$passageiro.cpf',
                 statusCheckin: '$$passageiro.statusCheckin',
-                // AQUI ESTÁ A MUDANÇA: Incluímos o portaID do voo dentro de cada passageiro
-                portaoAtribuido: '$portaoId' // Referencia o portaID do documento Voo original
+                portaoAtribuido: '$portaoId' 
               }
             }
           }
