@@ -9,6 +9,7 @@ const modelSchema = new mongoose.Schema({
     status: String
 });
 
+
 const modelVoo = 'Voo'
 if(mongoose.connection && mongoose.connection.models[modelVoo]){
     module.exports = mongoose.connection.models[modelVoo];

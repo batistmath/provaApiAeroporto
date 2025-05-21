@@ -37,11 +37,12 @@ controller.use(express.json())
         if (!senhavalida) {
             return res.status(401).send({ erro: 'Credenciais incorretas.' });
         }
+        const funcionario = await Funcionario.findOne({email: req.body.email});
         const token = jwt.sign(
             {
-                id: Funcionario._id,
-                email: Funcionario.email,
-                cargo: Funcionario.cargo
+                sub: funcionario._id,
+                email: funcionario.email,
+                cargo: funcionario.cargo
             },
             process.env.JWT_SECRET,
             { expiresIn: '1h' }

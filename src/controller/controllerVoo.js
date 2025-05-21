@@ -58,6 +58,10 @@ controller.use(express.json())
         }, {
             new:true
         })
+        cargouser = req.user.cargo
+        if (cargouser != 'admin') {
+            return res.status(401).send({ erro: 'O cargo do funcionário deve ser admin' });
+        }
         return res.send(voos)
     }
     exports.deletevoo = async (req,res) => {
